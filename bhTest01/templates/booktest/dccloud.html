@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<!-- saved from url=(0099)http://18.18.10.24:8080/sgccportal/bigscreen/index.html;jsessionid=5A01A1690AA483D8055D9A0DFA5AFCC2 -->
+<html lang="en" class=" js no-touch cssanimations csstransitions"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据库同步管理</title>
+    <meta name="author" content="Codrops">
+	<link rel="stylesheet" href="/static/files/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/files/vendor/bootstrap/css/bootstrap-table.css">
+    <link rel="stylesheet" type="text/css" href="/static/files/default.css">
+    <link rel="stylesheet" type="text/css" href="/static/files/component.css">
+    <link rel="stylesheet" href="/static/files/reset.css">
+    <link rel="stylesheet" href="/static/files/font-awesome.css">
+    <link rel="stylesheet" href="/static/files/backup.css">
+	
+	<!--ADD BY WANG RAN-->
+	<link rel="stylesheet" href="/static/files/wr/author_css/wr-add.css">
+	<link rel="stylesheet" href="/static/files/vendor/font-awesome/css/font-awesome.min.css">
+</head>
+<body  style="background-image:url(/static/files/background/02.jpg); background-repeat:repeat-y;">
+<!-- <div class='after'></div> -->
+<div id="pt-main" class="">
+    <div class=" pt-page pt-page-current" >
+        <header class="clear-bug-mg">
+            <div class="text-center">
+                <h2>数据库同步管理</h2>
+            </div>
+			<div class="actual-time text-center">2018年03月29日 11:16:13</div>
+        </header>
+               <!--快照存储-->
+                <section class="backup-snapshot db-pos-wr ">
+                    <!--动态数据传输容器-->
+                    <div class="movedata-container movedata-container-adjust-dbstatus">
+
+                        <!--数据库数据源-->
+                        <div class="data-source" style="width: 95px;">
+                            <div class="data-source-outercircle">
+                                <div id = "src-db" class="data-source-innercircle data-source-dbsource" data-set="北京">
+                                    <img src="/static/files/data-green.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--数据库传输路径-->
+                        <div class="data-route data-route-snapshot" data-routename="数据库状态">
+							<i class="icon-chevron-right"></i>
+							<i class="icon-chevron-right"></i>
+							<i class="icon-chevron-right"></i>
+							<i class="icon-chevron-right"></i>
+							<i class="icon-chevron-right"></i>
+                            
+                        </div>
+
+                        <!--数据库数据目的地-->
+                        <div class="data-destination" style="width: 95px;">
+                            <div class="data-destination-outercircle">
+                                <div  id = "des-db" class="data-destination-innercircle data-destination-dbsource" data-set="上海">
+                                    <img src="/static/files/data-yellow.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+<!--  
+                    <div class="movedata-container movedata-container-adjust-snapshot">
+
+                        <!--存储快照数据源
+                        <a class="snapshot-master" href="javascript:void(0);">
+	                        <div class="data-source" style="width: 95px;">
+	                            <div class="data-source-outercircle">
+	                                <div  id = "src-storage" class="data-source-innercircle data-source-snapshot" data-set="北京">
+	                                    <img src="/static/files/disk-green.png" alt="">
+	                                </div>
+	                            </div>
+	                        </div>
+						</a>
+                        <!--存储快照传输路径
+                        <div class="data-route data-route-snapshot" data-routename="存储快照同步">
+                            <i class="icon-file-alt"></i>
+                            <i class="icon-file-alt"></i>
+                            <i class="icon-file-alt"></i>
+                            <i class="icon-file-alt"></i>
+                            <i class="icon-file-alt"></i>
+                        </div>
+						
+                        <!--存储快照数据目的地
+                        <a class="snapshot-slaver" href="javascript:void(0);">
+	                        <div class="data-destination" style="width: 95px;">
+	                            <div class="data-destination-outercircle">
+	                                <div  id = "des-storage" class="data-destination-innercircle data-destination-snapshot" data-set="上海">
+	                                    <img src="/static/files/disk-yellow.png" alt="">
+	                                </div>
+	                            </div>
+	                        </div>
+	                     </a>  
+                    </div>
+				-->	
+				</section>
+			<div class="row table-pos-wr table-font-wr">
+				<div class=" col-md-4">
+				<!--
+							<ul class="list-group text-center">
+								<li class="list-group-item">北京1：<span>正常</span></li>
+								<li class="list-group-item">免费 Window 空间托管</li>
+								<li class="list-group-item">图像的数量</li>
+								<li class="list-group-item">24*7 支持</li>
+								<li class="list-group-item">每年更新成本</li>
+							</ul>
+				-->
+							<table class="table table-hover table-bordered">
+									  
+									  <thead>
+										<tr class="success ">
+										  <th>属性</th>
+										  <th>状态</th>
+										</tr>
+									  </thead>
+									  <tbody id="dbStatus" >
+									  <!--define in getData.js-->
+									  </tbody>
+							</table>
+				</div>
+				<div class="col-md-8">
+				    <div style="overflow-y:auto; width:100%;height:300px">
+							<table  id="table1" class="table table-hover table-bordered">
+									  
+									  <thead>
+										<tr class="success">
+										  <th>网址</th>
+										  <th>访问速度(秒)</th>
+										  <th>状态</th>
+										</tr>
+									  </thead>
+									  <tbody id="httpStatus" >
+									  <!--define in getData.js-->
+									  </tbody>
+							</table>
+					</div>
+				</div>
+			</div>
+				
+	
+<script src="/static/files/jquery-1.1.js"></script>
+<!--
+<script src="/static/files/backup.js"></script>
+<script src="/static/files/jquery.dlmenu.js"></script>
+<script src="/static/files/pagetransitions.js"></script>
+<script src="/static/files/echarts.js"></script>
+-->
+<script src="/static/files/zygl.js"></script>
+<script src="/static/files/ztkj.js"></script>
+<script src="/static/files/ywgs_03.js"></script>
+<!-- ADD BY WANG RAN TO GET DATA FROM SERVER -->
+<script src="/static/files/vendor/jquery/jquery.min.js"></script>
+<script src="/static/files/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/files/vendor/bootstrap/js/bootstrap-table.js"></script>
+<script src="/static/files/vendor/bootstrap/js/bootstrap-table-zh-CN.js"></script>
+<script src="/static/files/wr/author_js/getData.js"></script>
+</script>
+
+
+<!--  script>
+    function fullPage() {
+        if (document.body.offsetHeight == window.screen.height
+            && document.body.offsetWidth == window.screen.width) {
+            $('div.pt-page').css('padding-top', '3%');
+
+        } else {
+            $('div.pt-page').css('padding-top', '0');
+
+        }
+    }
+    fullPage();
+    $(window).resize(function () {
+        fullPage();//全屏样式{
+        autoPage();
+        titleStyle();
+    });
+    function titleStyle() {
+        var size = parseFloat($(".btn-back").css('font-size'));
+        $('.icon-back').css({
+            'border-width': size / 2,
+            'top': -0.36 * size
+        });
+    }
+    titleStyle();
+    $("#bsmLogout").on("click",function(){
+		hideOverlay();
+		hideBsmInfo();
+	});
+	$("#bsmSave").on("click",function(){
+		hideOverlay();
+		hideBsmInfo();
+	});
+	$('#closeLittleCard').on('click',function(){
+		hideOverlay();
+		 $(".littleCard").fadeOut(800);
+		setTimeout(function(){
+			 $('.littleCard').css({'display':'none'})
+		 },800)
+		
+	})
+	
+	/* 显示bsm参数配置模块 */
+	function showBsmInfo() {
+		// fadeTo第一个参数为速度，第二个为透明度
+	    // 多重方式控制透明度，保证兼容性，但也带来修改麻烦的问题
+	    $("#bsmInfo").fadeTo(800, 1);
+	}
+
+	/* 隐藏bsm */
+	function hideBsmInfo() {
+	    $("#bsmInfo").fadeOut(800);
+	}
+	/* 显示bsm节点参数修改模块 */
+	function showBsmInfoUpdate() {
+		// fadeTo第一个参数为速度，第二个为透明度
+	    // 多重方式控制透明度，保证兼容性，但也带来修改麻烦的问题
+	    $("#bsmInfoUpdate").fadeTo(800, 1);
+	}
+
+	/* 隐藏bsm节点 */
+	function hideBsmInfoUpdate() {
+	    $("#bsmInfoUpdate").fadeOut(800);
+	}
+	function showSaveTip(obj){
+		$("#tipContent").html(obj);
+		$("#saveTip").fadeTo(800, 1);
+	}
+	function hideSaveTip(){
+		$("#saveTip").fadeOut(800);
+	}
+	function showDeleteTip(obj){
+		$("#deleteTip").fadeTo(800, 1);
+	}
+	function hideDeleteTip(){
+		$("#deleteTip").fadeOut(800);
+	}
+	/* 显示cloudos参数配置模块 */
+	function showCloudosInfo() {
+		// fadeTo第一个参数为速度，第二个为透明度
+	    // 多重方式控制透明度，保证兼容性，但也带来修改麻烦的问题
+	    $("#cloudosInfo").fadeTo(500, 1);
+	}
+	/* 隐藏cloudos */
+	function hideCloudosInfo() {
+	    $("#cloudosInfo").fadeOut(800);
+	}
+
+
+	/* 显示遮罩层 */
+	function showOverlay(obj) {
+		if(obj == 2){
+			$("#overlay2").height(pageHeight());
+		    $("#overlay2").width(pageWidth());
+		    $("#overlay2").fadeTo(800, 0.8);
+		    return;
+		}
+		if(obj == 3){
+			$("#overlay3").height(pageHeight());
+		    $("#overlay3").width(pageWidth());
+		    $("#overlay3").fadeTo(800, 0.8);
+		    return;
+		}
+	    $("#overlay").height(pageHeight());
+	    $("#overlay").width(pageWidth());
+	    // fadeTo第一个参数为速度，第二个为透明度
+	    // 多重方式控制透明度，保证兼容性，但也带来修改麻烦的问题
+	    $("#overlay").fadeTo(800, 0.9);
+	}
+
+	/* 隐藏覆盖层 */
+	function hideOverlay(obj) {
+		
+	    $("#overlay").fadeOut();
+	}
+	/* 当前页面高度 */
+	function pageHeight() {
+	    return document.body.scrollHeight;
+	}
+
+	/* 当前页面宽度 */
+	function pageWidth() {
+	    return document.body.scrollWidth;
+	}
+	function showDiv(){
+		setTimeout(function(){
+			$("#华北分中心").show();
+			$("#华东分中心").show();
+			},500);
+	}
+	function hideDiv(){
+		$("#华北分中心").hide();
+		$("#华东分中心").hide();
+	}
+</script>-->
+
+
+</body></html>

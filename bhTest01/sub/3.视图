@@ -1,0 +1,147 @@
+1.url配置
+	*先在base urls.py中定义一个指向该应用的url
+		ex: 
+			url(r'^booktest/',include('booktest.urls'))
+		说明：booktest为首的应用，都交由booktest.urls来处理
+	*在 app 的urls.py中定义url
+		ex:
+			*url(r'^(?P<p2>\d+)/(?P<p3>\d+)/(?P<p1>\d+)',detail),
+    		*url(r'^(\d+)/(\d+)',show)
+    	说明：涉及到两个点，位置参数和关键字参数,
+    	1.位置参数：如下面的url,用括号括起来，代表传入到show函数中两个参数,show 函数按照顺序接收参数。
+    	2.关键字参数：如url 1,格式为(?P<参数变量名>\d+)，完事之后，在函数中就必须引用这个参数变量名才能够获取相关参数
+    	，这个不用按照顺序来。
+2.视图
+	*404,500
+	*request
+		*path
+		*method
+		*encoding
+		*GET	#重点，要记住,属于QueryDict对象，允许键相同
+			*get('键') or GET['键']
+			*getlist('键')
+		*POST	#重点，要记住
+			*在获取的时候使用request.POST.get('')/[]获取post的参数
+		*FILES
+		*COOKIES
+			*
+		*session
+	*response
+			加载模板流程（理解）：
+				t1 = loader.get_template('/booktest/index.html')) #加载模板
+				content = RequestContent(request,{'h1':'hello'})	#组数据
+				HttpResponse(t1.render(context))	#渲染模板
+			简写为：
+				render(request,'booktest/index.html',content)
+			重定向：
+				*httpResponseRedict() #重定向，是httpResponse的子类
+			简写：
+				*redirect(to) #to 为url而不是template的路径
+			JsonResponse #留到后面讲ajax的时候讲
+	
+	*cookie:不能够跨域名访问
+		def cookieTest(request):
+		    response = HttpResponse()
+		    response.set_cookie('t1','abc')
+		    cookie = request.COOKIES
+		    if cookie['t1']:
+		        response.write(cookie['t1'])
+		    return response
+		    #跨域名访问不能共享cookie
+		
+	*session:状态保持
+		*主要练习session的添加，读取和删除：
+			Ex:
+		*原理：
+			*默认session存在django_session表中
+			*也可以存在内存/mongo/redis中
+			*可以通过session_expiry(timeout)设置session的会话时间。
+	
+源码：
+	from django.shortcuts import render, redirect
+from .models import *
+from django.http import *
+# Create your views here.
+def index(request):
+    booklist = BookInfo.books1.all()
+    content={'title':booklist}
+    return render(request, 'booktest/dccloud.html',content)
+
+def show(request,id):
+    book = BookInfo.books1.get(pk=id)
+    heroList = book.heroinfo_set.all()
+    content = {'list':heroList}
+    return render(request,'booktest/show.html',content)
+
+#views 练习
+def detail(request,p1,p2,p3):
+    return HttpResponse(p1)
+
+#
+def getTest1(request):
+    return render(request, 'booktest/getTest1.html')
+def getTest2(request):
+    a1 = request.GET['a']
+    b1 = request.GET['b']
+    c1 = request.GET['c']
+    content = {'a':a1,'b':b1,'c':c1} 
+    return render(request, 'booktest/getTest2.html',content)
+def getTest3(request):
+    a1 = request.GET.getlist('a')
+    content = {'a':a1} 
+    return render(request, 'booktest/getTest3.html',content)
+
+#post测试
+def postTest1(request):
+    return render(request, 'booktest/postTest1.html')
+
+def postTest2(request):
+    uname = request.POST['uname']
+    upasswd = request.POST['upwd']
+    ugender = request.POST['ugender']
+    uhobby = request.POST.getlist('uhobby')
+    content = {'uname':uname,'upasswd':upasswd,'ugender':ugender,'uhobby':uhobby} 
+    return render(request, 'booktest/postTest2.html',content)
+
+
+#测试cookie
+def cookieTest(request):
+    response = HttpResponse()
+    response.set_cookie('t1','abc')
+    cookie = request.COOKIES
+    if cookie['t1']:
+        response.write(cookie['t1'])
+    return response
+    #跨域名访问不能共享cookie
+
+
+#转向练习
+def redTest(request):
+    #return  HttpResponseRedirect('postTest1') #这里必须是url地址
+    return redirect('/booktest/postTest1')
+
+#session练习
+def session1(request):
+    uname = request.session.get('myname')
+    content={'uname':uname}
+    return render(request, 'booktest/session1.html',content)
+
+def session2(request):
+    return render(request, 'booktest/session2.html')
+
+def sessionHandle(request):
+    uname = request.POST['uname']
+    request.session['myname'] = uname #设置
+    request.session.set_expiry(0)   #设置过期时间，0表示关闭浏览器就过期
+    return redirect('/booktest/session1')
+def session3(request):
+    del request.session['myname']
+    return redirect('/booktest/session1')
+
+
+
+
+	
+	
+	
+		

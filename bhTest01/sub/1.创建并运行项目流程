@@ -1,0 +1,90 @@
+1.创建虚拟环境，pip安装django/mysql等
+2.新建django项目，以eclipse为例
+3.右键项目-django-create application9(manage.py startapp)
+4.进入base的settings.py文件，在INSTALLED_APPS 列表中新增应用名
+5.在新增应用的文件夹下编辑models.py文件（ORM-模型关系映射）新增表：
+	ex:class BookInfo(models.Model):
+	    btitle = models.CharField(max_length=20)
+	    bpub_date = models.DateTimeField(db_column='pub_date')
+	    bread = models.IntegerField(default=0)
+	    bcommet = models.IntegerField(default=0)
+	    isDelete = models.BooleanField(default=0)
+	    def __str__(self):
+	        return self.btitle
+6.编辑数据库配置-在settings.py DATABASES字典中加入如下信息（以mysql为例）：
+	Ex：
+		DATABASES = {
+   		'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'demo',
+        'USER':'root',
+        'PASSWORD':'mysql',
+        'HOST':'localhost',
+        'PORT':'3306'
+		    }
+		}
+7.右键项目-django-做迁移(makemigrations/migrate)，完成后就实现了ORM，这里有可能会报错，是因为没有安装pymysql。
+  自己在网上搜一下，python3 支持mysqlclient/connector等，具体名字上官网看。
+8.可以做如下测试：
+	ex:
+	右键-django-python shell(ipython)
+		from booktest.models import *
+		b = BookInfo()
+		b.btitle = '神雕侠侣'
+		from datetime import datetime
+		b.bupdate_time = datetime(year=1900,month=10,day=3)
+		b.save()
+		BookInfo.objects.all() #查看所有的记录
+		b=BookInfo.objects.get(pk=1)
+	至此,模型层已经构建完毕
+9.编写views.py文件
+	下面是views.py文件中的一个函数，他的作用是获取BookInfo的所有记录，并渲染给ddcloud.html。
+	ex:
+		def index(request):
+		    booklist = BookInfo.objects.all()
+		    content={'title':booklist}
+		    return render(request, 'booktest/dccloud.html',content)
+		def show(request,id):
+		    book = BookInfo.objects.get(pk=id)
+		    heroList = book.heroinfo_set.all()
+		    content = {'list':heroList}
+		    return render(request,'booktest/show.html',content)
+	定义好之后，我们需要在urls.py配置。一个项目有很多应用，最好将自己的项目urls.py自己管理。
+	在base的urls.py里面定义一条记录如下：
+		url(r'^',include('booktest.urls'))
+	将开头为空的访问，都指向booktest.urls文件。
+	下面是应用里面的配置：
+		from booktest.views import *
+		urlpatterns = [
+		    url(r'^$', index),
+		    #正则中加上括号，在view中的函数就可以获取到。
+		    url(r'^(\d+)',show)
+		]
+	注：值得注意的是(\d+) 括号这种方式，views函数能够接收到括号里面的参数，这个要记住。
+10.建立templates
+	在base 的templates 中加入这一行：
+		'DIRS': [os.path.join(BASE_DIR,'templates')],
+	告诉解释器，在这里找模板，一般就是在和应用同级的目录下建文件夹templates,然后在templates新建按应用名字
+	命名的文件夹，在里面新增html。
+	注：我这里IDE中找不到，不知道为什么。最后是在应用文件夹下建立的templates,能找到。估计是我自己的问题。
+11.模板要获取传递给他的变量该如何获取？
+	*{{}} 获取变量
+	*{%for each in list%}...{%endfor%}循环
+	
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+					        
