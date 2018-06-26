@@ -1,0 +1,104 @@
+(1)静态文件
+	1.在html中可以写绝对路径如/static/booktest/a.jpg
+	2.逻辑显示路径和实际物理路径不必须一致，下面的STATIC_URL和STATICFILES_DIRS无需必须一致，html中写的是逻辑路径
+  	      这样做的好处是能够完成实际物理路径的隐藏。一般还是起一样的
+  	3.也可以使用标签的方式，动态根据url来生成一个地址,具体做法如下:
+  		(1) 配置时候首先在settings.py文件加入如下两行：
+  			STATIC_URL = '/static1/'
+			STATICFILES_DIRS = [
+			    os.path.join(BASE_DIR,'static')
+			    ]
+  		(2) 在html模板头加 {%load static from staticfiles%} 一行，这行是引入static
+  		(3) 在html中需要引入静态文件的地方加入如下标签：
+  			{% static 'static内部你需要引入的静态文件'%}
+  			举个栗子：
+  				<img src="{% static 'booktest/a.jpg'%}"></img>
+总结：以上就完成了静态文件的动态引入，有些类似反向解析。好处是当改变settings.py中的STATIC定义的文件夹时，无需修改html
+完成了一个实际物理文件夹的隐藏功能。
+(2)中间件
+	1.在settings中MIDDLEWARE定义了几个中间件，包括csrf也是中间件。
+  		面向切面编程（aop）:在程序的执行的过程中，允许在某一环节进行干预，又不影响程序的运行过程。
+  	2.在django中面向切面编程就是中间件，他本质是一个python类。这个类可以实现以下一个或多个方法：
+  		*__init__()
+  			#每次请求都会执行
+  		*process_request() #请求url之前被调用
+  		*process_view()	#请求view之前被调用
+  		*process_template_response() #返回render时被调用
+  		*process_response() #返回html被调用
+  		*process_exception() #异常时走他,只有视图过程的错误才能走他
+总结：中间件是一个类，可以干预访问流程的几大块。理解思想即可
+(3)上传图片
+(4)分页
+	分页需要引入：Paginator类
+	list = bookInfo.objects.all() 从数据库获取记录列表
+	pageinator = Paginator(list,n) 将list 按照每页n条记录分页
+	page = pageinator.page(x) #获取第x页的记录。
+	看源码：就是一个列表，按照定义的每页显示数量和当前页码计算top和bottom
+	至于html参考page.html
+(5)jquery的ajax:
+    *例子是省市县的三级联动，主要是jquery的ajax用法，操作步骤如下：
+    	1.将省市县数据放入mysql数据库中。
+    	2.建模型类如下：
+    		class AreaInfo(models.Model):
+			    title = models.CharField(max_length=20)
+			    parea = models.ForeignKey('self',null=True,blank=True)
+			 注：自关联要好好理解，加深记忆
+		3.建url,views,html
+		4.关于html select标签使用例子如下：
+		<select id="pro" >
+		<option value="" >请选择省</option>
+		</select>
+		<hr>
+		<select id="city">
+		<option value="" >请选择市</option>
+		</select>
+		<hr>
+		<select id="dis">
+		<option value="">请选择区</option>
+		</select>
+		<hr>
+		5.写jquery
+		//查询省信息
+		$(function(){
+			$.get('pro/0',function(data){
+				$.each(data.data,function(index,item){
+				$('#pro').append('<option   value="'+item[0]+'">'+item[1]+'</option>')
+				});
+			});
+			
+			$("#pro").change(function(){
+				var id = $(this).val();
+				$("#city").empty();
+				$("#city").append('<option value="">请选择市</option>');
+				$.get('city/'+id,function(data){
+					$.each(data.data,function(index,item){
+						$('#city').append('<option   value="'+item[0]+'">'+item[1]+'</option>')
+					});
+					});
+				});
+			$("#city").change(function(){
+				var id = $(this).val();
+				$("#dis").empty();
+				$("#dis").append('<option value="">请选择县</option>');
+				$.get('dis/'+id,function(data){
+					$.each(data.data,function(index,item){
+						$('#dis').append('<option   value="'+item[0]+'">'+item[1]+'</option>')
+					})
+				})
+			})
+			});
+		注：这里面有几个方法要熟练掌握$.get(),$.each(),append(),empty()。
+		jquery部分不会看的话要查阅文档。
+	
+	
+	
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,92 @@
+模板
+(1) templates应该放在哪里
+	*如果要移植，则放在app里面
+	*不移，放在根目录下面
+
+(2) 模板语言：DTL
+ *{{变量}}
+	*.的解析优先级
+		1.按照字典处理
+		2.按照对象方法进行解析
+		3.当做列表进行解析
+	*如果变量不存在，将插入空字符
+ *方法
+	*模板调用方法时不能传递参数
+		举例：
+		def showName(self):
+        	return self.btitle
+*循环
+	*
+	{%for...in...%}
+	{%empty%} #空的时候要干啥,要放在紧邻endfor处
+		啥也没找到
+	{%endfor%}
+*过滤器
+	过滤器需要的话去查，实在是太多了。
+	{{变量|过滤器}}
+*注释
+{#   #} 单行
+{%comment%}
+  注释内容
+ {%endcomment%}
+
+(3) 反向解析
+解析：根据url生成一个地址,好处是不用硬编码，当连接改变的时候，只要namspace和name不改变，就能解析出地址。标签如下
+<a href="{% url 'booktest:showst' '124' %}">显示</a>
+booktest对应根url中的namespace,url(r'^booktest/',include('booktest.urls',namespace='booktest'))
+showst 对应app_url中的name,url(r'^(\d+)$',showst,name='showst')
+如果有参数，则在后面加上即可，例'124'
+(4) 模板继承
+是否需要继承，要看是否有重复内容。
+流程
+	1.在base.html中写基础模板并在基础模板挖坑，坑的格式如下：
+	{%block name%}
+	{%endblock name%}
+	2.在继承的模板里面需要首先继承基础模板，格式如下
+		{%extends 'booktest/base.html' %}
+	     然后填在基础模板挖的坑，
+	   {%block name%}
+	   <h1>SHANG HAI<h1>
+	   {%endblock name%} 
+	3.另外在views传递参数的时候，这个参数可以写在任何一级的模板里面，只模板有{{变量}}就没问题 。
+		这块尤其适用于登录用户名那块。
+实例实现三层继承关系：
+	参考booktest base.html base_user.html user1.html user2.html
+(5) html转义
+啥意思：就是view传过来的变量，有可能是html格式的：如<h1>你好</h1>，如果不关闭转义，他就会转义按照字符串直接输出
+	1.关闭转义的两种方式：
+		1.标签的方式，只针对视图传到模板的方式
+			{%autoescape off%}
+			{{变量名}}
+			{%endautoescape%}
+		2.过滤器的方式
+			{{变量名|safe}}
+	2.字符串的转义：
+		1.需手动转，具体用的时候在查
+(6)csrf--跨站攻击
+作用：保障网站安全，减少跨站攻击，默认是启动的csrf防御的（自己做了一套和你一样的表单，我能提交后访问你，就说明我攻击成功）
+	1.只有post 请求时才能用到csrf验证。
+	2.在表单post请求时，在form中加上{%csrf_token%}标签即可
+	3.原理：
+	增加了csrf后其实增加一个隐藏域
+	<input type='hidden' name='csrfmiddlewaretoken' value='3Xfj1G5P95gAOymXxMCehlGHmtB2zLc0AYYkGAnqqubG8hw0yH04yO7UwgGQnlNQ' /
+	这个value被提交后，不知道和谁拿来做对比，按理说是应该和cookie作对比。如果对比不上就不能够提交成功。但是django这玩意原封不动的复制到我自己的表单中
+	也可以访问，我自己的html并没有cookie说明他不是和cookie作对比的。那这玩意就是鸡肋了。
+(7)有用的保护跨站攻击工具-验证码
+	1.查找第三方验证码
+	2.学习pillow模块
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
